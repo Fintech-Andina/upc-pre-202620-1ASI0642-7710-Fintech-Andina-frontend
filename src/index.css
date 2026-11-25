@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-inter: "Inter", "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Brand & Sidebar (Figma SWXOwwjwSTF4Zjs3Ijc9Gh) */
+  --color-navy-900: #0b3c5d;
+  --color-navy-950: #082b44;
+  --color-navy-800: #0a4d6b;
+
+  /* Emerald Primary Palette */
+  --color-emerald-primary: #0f9d75;
+  --color-emerald-deep: #00694d;
+  --color-emerald-hover: #0a7a5b;
+  --color-emerald-bright: #14b886;
+  --color-emerald-mint: #65dbaf;
+  --color-emerald-glow: #82f8ca;
+
+  /* Surfaces & Borders */
+  --color-canvas: #f4f7fa;
+  --color-canvas-soft: #f7f9ff;
+  --color-surface-tint: #edf4ff;
+  --color-surface-pill: #e4effd;
+  --color-border-subtle: #e6ebf0;
+
+  /* Text & Ink */
+  --color-ink-primary: #121d26;
+  --color-ink-slate: #0f172a;
+  --color-ink-muted: #3d4a43;
+  --color-ink-secondary: #64748b;
+
+  /* Semantic Status */
+  --color-amber-text: #805200;
+  --color-amber-badge: #b45309;
+  --color-danger-text: #ba1a1a;
+  --color-danger-dark: #93000a;
+  --color-danger-bg: #ffdad6;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    color: var(--color-ink-primary);
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Native <dialog> modal rules (modern-web-guidance) */
+dialog:modal {
+  overscroll-behavior: contain;
+  margin: auto;
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* Semantic responsive table wrapper */
+.table-region {
+  overflow-x: auto;
+  max-inline-size: 100%;
+  container-type: inline-size;
+}
+
+.table-region table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.table-region thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+}
+
+/* Print / PDF styles for Estado de Cuenta & Cronograma */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .print-area {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
