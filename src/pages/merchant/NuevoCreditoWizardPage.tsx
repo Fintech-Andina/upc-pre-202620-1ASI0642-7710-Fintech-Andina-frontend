@@ -937,6 +937,9 @@ export function NuevoCreditoWizardPage() {
                   </h2>
                   <p className="text-xs text-[#64748b]">
                     Base 360 días / Mes comercial 30 días · Corte: {formatDatePE(simResult.fechaCorte)}
+                    {simResult.diasGracia > 0 && modalidad === 'Cuotas'
+                      ? ` · Fin de gracia (F0): ${formatDatePE(simResult.primeraFechaPago)}`
+                      : ''}
                   </p>
                 </div>
                 <Badge variant="emerald">{simResult.moneda}</Badge>
@@ -960,7 +963,7 @@ export function NuevoCreditoWizardPage() {
                       <tr className="bg-[#fffbeb]/60 text-[#805200]">
                         <td className="px-4 py-2.5 font-semibold">0 (Gracia)</td>
                         <td className="px-4 py-2.5 tabular-nums">
-                          {formatDatePE(simResult.fechaCorte)}
+                          {formatDatePE(simResult.primeraFechaPago)}
                         </td>
                         <td className="px-4 py-2.5 text-right tabular-nums">
                           {formatMoney(simResult.precioLista, simResult.moneda)}

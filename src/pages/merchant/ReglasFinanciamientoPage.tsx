@@ -304,9 +304,20 @@ export function ReglasFinanciamientoPage() {
                 </div>
               </div>
               <p className="text-[11px] text-[#3d4a43]">
-                Corte: <strong>{formatDatePE(simResult.fechaCorte)}</strong> · 1er pago:{' '}
-                <strong>{formatDatePE(simResult.primeraFechaPago)}</strong> · Total a pagar:{' '}
-                <strong>{formatMoney(simResult.totalPagar, simResult.moneda)}</strong>
+                Corte: <strong>{formatDatePE(simResult.fechaCorte)}</strong> ·{' '}
+                {modalidad === 'Cuotas' &&
+                simResult.diasGracia > 0 &&
+                simResult.cronograma.length > 0 ? (
+                  <>
+                    Fin de gracia (F0): <strong>{formatDatePE(simResult.primeraFechaPago)}</strong> ·
+                    1ra cuota: <strong>{formatDatePE(simResult.cronograma[0].fechaVencimiento)}</strong>
+                  </>
+                ) : (
+                  <>
+                    1er pago: <strong>{formatDatePE(simResult.primeraFechaPago)}</strong>
+                  </>
+                )}{' '}
+                · Total a pagar: <strong>{formatMoney(simResult.totalPagar, simResult.moneda)}</strong>
               </p>
             </div>
           )}

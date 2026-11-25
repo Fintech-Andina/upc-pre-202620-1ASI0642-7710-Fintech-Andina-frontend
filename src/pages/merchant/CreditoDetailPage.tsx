@@ -102,9 +102,20 @@ export function CreditoDetailPage() {
 
           <div className="text-left sm:text-right text-xs text-[#64748b]">
             <p>
-              Corte: <strong className="text-[#121d26]">{formatDatePE(credito.fechaCorte)}</strong> ·
-              1er Pago:{' '}
-              <strong className="text-[#121d26]">{formatDatePE(credito.primeraFechaPago)}</strong>
+              Corte: <strong className="text-[#121d26]">{formatDatePE(credito.fechaCorte)}</strong> ·{' '}
+              {credito.modalidad === 'Cuotas' && credito.diasGracia > 0 && cuotas.length > 0 ? (
+                <>
+                  Fin de gracia (F0):{' '}
+                  <strong className="text-[#121d26]">{formatDatePE(credito.primeraFechaPago)}</strong> ·
+                  1ra cuota:{' '}
+                  <strong className="text-[#121d26]">{formatDatePE(cuotas[0].fechaVencimiento)}</strong>
+                </>
+              ) : (
+                <>
+                  1er Pago:{' '}
+                  <strong className="text-[#121d26]">{formatDatePE(credito.primeraFechaPago)}</strong>
+                </>
+              )}
             </p>
             <p className="mt-0.5">
               TCEA: <strong className="text-[#00694d]">{(credito.tcea * 100).toFixed(4)}%</strong> ·

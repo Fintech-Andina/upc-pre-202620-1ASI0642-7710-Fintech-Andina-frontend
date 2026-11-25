@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Download,
@@ -20,6 +20,32 @@ import { Button } from '@/components/ui/Button';
 import { EmptyState, PageLoader } from '@/components/ui/EmptyState';
 import { formatMoney } from '@/utils/formatters';
 import { ProductoModal } from './ProductoModal';
+
+function ProductThumbnail({ src, alt }: { src?: string | null; alt: string }) {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [src]);
+
+  if (!src || hasError) {
+    return (
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#edf4ff] text-[#0b3c5d]">
+        <Tag className="size-5" aria-hidden="true" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setHasError(true)}
+      className="size-12 shrink-0 rounded-xl border border-[#e6ebf0] bg-white object-cover"
+    />
+  );
+}
 
 export function ProductosPage() {
   const { tienda } = useAuth();
@@ -189,17 +215,7 @@ export function ProductosPage() {
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      {prod.imagenUrl ? (
-                        <img
-                          src={prod.imagenUrl}
-                          alt={prod.nombre}
-                          className="size-12 shrink-0 rounded-xl border border-[#e6ebf0] object-cover"
-                        />
-                      ) : (
-                        <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#edf4ff] text-[#0b3c5d]">
-                          <Tag className="size-5" />
-                        </div>
-                      )}
+                      <ProductThumbnail src={prod.imagenUrl} alt={prod.nombre} />
                       <div className="min-w-0">
                         <p className="text-[11px] font-medium text-[#64748b] truncate">
                           SKU: {prod.sku}

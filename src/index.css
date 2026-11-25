@@ -68,6 +68,19 @@ dialog::backdrop {
   overscroll-behavior: contain;
 }
 
+/* Top-layer help tooltip popover (escapes <dialog> and overflow-y-auto containers) */
+.field-help-popover[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-height: calc(100dvh - 1.5rem);
+  overflow-y: auto;
+}
+
+.field-help-popover[popover]:not(:popover-open) {
+  display: none;
+}
+
 /* Semantic responsive table wrapper */
 .table-region {
   overflow-x: auto;

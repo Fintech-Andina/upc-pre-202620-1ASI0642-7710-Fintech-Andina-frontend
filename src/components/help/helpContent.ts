@@ -217,8 +217,10 @@ export const FIELD_HELP: Record<string, FieldHelpEntry> = {
   },
   'producto.imagenUrl': {
     title: 'URL de imagen referencial',
-    whatToEnter: 'Enlace web opcional de la foto del producto.',
-    formatRange: 'Opcional; URL http(s) válida.',
+    whatToEnter:
+      'Enlace directo opcional a la imagen del producto (.jpg, .png, .webp), no el enlace a una página web HTML.',
+    formatRange:
+      'Opcional; URL http(s) directa a archivo de imagen. Si no carga, la tarjeta usa el ícono por defecto.',
     financialImpact: 'Solo visual para mostrar el producto en catálogo y Wizard.',
   },
   'producto.descripcion': {

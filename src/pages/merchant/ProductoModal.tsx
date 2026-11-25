@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { PackagePlus, Save } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ImageOff, PackagePlus, Save } from 'lucide-react';
 import { toast } from 'sonner';
 import { productosApi } from '@/api/endpoints';
 import { extractApiErrorMessage } from '@/api/client';
@@ -48,6 +48,7 @@ export function ProductoModal({
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ProductoFormValues>({
     resolver: zodResolver(productoSchema),
@@ -99,6 +100,22 @@ export function ProductoModal({
       }
     }
   }, [open, editing, reset]);
+
+  const rawImagenUrl = watch('imagenUrl');
+  const trimmedImgUrl = rawImagenUrl?.trim() ?? '';
+  const [previewStatus, setPreviewStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
+
+  useEffect(() => {
+    if (!open || !trimmedImgUrl) {
+      setPreviewStatus('idle');
+      return;
+    }
+    if (!/^https?:\/\/.+/i.test(trimmedImgUrl)) {
+      setPreviewStatus('error');
+      return;
+    }
+    setPreviewStatus('loading');
+  }, [trimmedImgUrl, open]);
 
   const mutation = useMutation({
     mutationFn: async (values: ProductoFormValues) => {
@@ -266,10 +283,49 @@ export function ProductoModal({
         <FormField label="URL de imagen (opcional)" htmlFor="prod-img" helpKey="producto.imagenUrl">
           <input
             id="prod-img"
-            placeholder="https://..."
+            placeholder="https://ejemplo.com/imagen.jpg"
             className={inputBaseClass}
             {...register('imagenUrl')}
           />
+          {trimmedImgUrl && (
+            <div className="mt-2 flex items-center gap-3 rounded-xl border border-[#e6ebf0] bg-[#f8fafc] p-2.5">
+              <div className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#e2e8f0] bg-white">
+                {previewStatus !== 'error' && (
+                  <img
+                    key={trimmedImgUrl}
+                    src={trimmedImgUrl}
+                    alt="Vista previa del producto"
+                    onLoad={() => setPreviewStatus('loaded')}
+                    onError={() => setPreviewStatus('error')}
+                    className={previewStatus === 'loaded' ? 'size-full object-cover' : 'sr-only'}
+                  />
+                )}
+                {previewStatus === 'error' && (
+                  <ImageOff className="size-5 text-[#b45309]" aria-hidden="true" />
+                )}
+                {previewStatus === 'loading' && (
+                  <span className="text-[10px] font-medium text-[#64748b]">...</span>
+                )}
+              </div>
+              <div className="min-w-0 text-xs">
+                {previewStatus === 'loaded' && (
+                  <p className="flex items-center gap-1.5 font-medium text-[#00694d]">
+                    <CheckCircle2 className="size-3.5 shrink-0" aria-hidden="true" />
+                    Vista previa cargada correctamente.
+                  </p>
+                )}
+                {previewStatus === 'loading' && (
+                  <p className="text-[#64748b]">Verificando enlace de imagen...</p>
+                )}
+                {previewStatus === 'error' && (
+                  <p className="flex items-start gap-1.5 font-medium text-[#805200]">
+                    <AlertCircle className="size-3.5 shrink-0 mt-0.5 text-[#b45309]" aria-hidden="true" />
+                    <span>Ingresa el enlace directo de una imagen (.jpg, .png, .webp)</span>
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </FormField>
 
         <FormField
